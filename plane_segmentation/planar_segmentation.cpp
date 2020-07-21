@@ -16,8 +16,8 @@
 
 using namespace std::literals::chrono_literals;
 
-double _max_distance = 0.01; 
-int _min_percentage = 5;
+double _max_distance = 0.05; 
+int _min_percentage = 20;
 bool _color_pc_with_error = false;
 
 class ColorMap{
@@ -194,7 +194,8 @@ void pointCloudCb(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_msg,   pcl::visualiz
             break;
 
         // planes.push_back(coefficients);
-        viewer->addPlane (*coefficients, "plane");
+        viewer->addPlane (*coefficients, "plane"+std::to_string(n_planes));
+        n_planes ++;
         std::cerr << "Model coefficients Inside: " << coefficients->values[0] << " " 
                                           << coefficients->values[1] << " "
                                           << coefficients->values[2] << " " 
@@ -217,7 +218,10 @@ int
  main (int argc, char** argv)
 {
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = createCloud();
+  // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = createCloud();
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::io::loadPCDFile ("../data/my_point_cloud.pcd", *cloud);
+
 /*
   pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
   pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
